@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Zone = require('./Zone')
+const Zone = mongoose.model('./Zone').schema
 
 const Time = {
   start: Number, // 9
@@ -13,7 +13,7 @@ const Profile = {
 
 const schema = {
   name: String, //Ski lift1
-  zone: Zone.schema,
+  zone: Zone,
   profiles: [Profile]
 }
 

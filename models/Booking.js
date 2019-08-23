@@ -9,7 +9,7 @@ const schema = {
   origin: Location,
   destination: Location,
   vehicle: Vehicle,
-  time: Date,
+  day: Date,
   start: Date, // calculated field
   end: Date // calculated field
 };

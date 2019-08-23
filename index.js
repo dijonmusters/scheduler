@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const { startOfDay, endOfDay } = require
 ('date-fns');
+const {getDuration} = require('./helpers')
 const { populateDrivers} = require('./seed')
 const app = express();
 const port = 5000;
@@ -19,6 +20,8 @@ mongoose.connect(uri, { useNewUrlParser: true })
 
 const Driver = require('./models/Driver');
 const Vehicle = require('./models/Vehicle');
+const Location = require('./models/Location');
+
 
 app.use(cors());
 app.use(express.json());
@@ -34,13 +37,6 @@ const closestTimes = (time, duration) => {
   return [time];
 }
 
-const getDuration = (origin, destination) => {
-  // return the duration of trip
-  return 0;
-}
-
-
-
 // GET nearestTimes (time): [time]
 app.get('/nearest-times', async (req, res) => {
   const { time } = req.body;
@@ -49,7 +45,9 @@ app.get('/nearest-times', async (req, res) => {
 
 // POST book (customerId, time): success || error
 app.post('/book', async (req, res) => {
-  const { customerId, time, origin, destination } = req.body;
+  const { customerId, time, originId, destinationId } = req.body;
+  const origin = await Location.findById(originId)
+  const destination = await Location.findById(destinationId)
   const duration = getDuration(origin, destination);
   try {
     const customer = await Customer.findOne({ _id: customerId });

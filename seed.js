@@ -3,25 +3,34 @@ const Driver = require('./models/Driver');
 const Vehicle = require('./models/Vehicle');
 const Zone = require('./models/Zone');
 const Location = require('./models/Location');
+const Customer = require('./models/Customer');
+const date = require('date-fns')
 
 
-const uri = "mongodb+srv://nick:spurs4357@schedulercluster-tsmyv.mongodb.net/scheduler_database?retryWrites=true&w=majority"
+
+const uri = process.env.MONGO_URI
 
 const print = () => console.log("ASFDSgdgffgf")
 
 mongoose.connect(uri, { useNewUrlParser: true })
-  .then(() => {
+  .then(async () => {
     console.log('successfully connected to mongo')
-    populateDrivers()
-    populateVehicles()
-    populateInitialZones()
-    populateZoneCommutes()
-    populateLocations()
+    // await populateDrivers()
+    // await populateVehicles()
+    // await populateInitialZones()
+    // await populateZoneCommutes()
+    // await populateLocations()
+    // await populateCustomers()
+    // populateBookings()
   })
   .catch(e => console.error(e));
 
 const clearDb = async () => {
   mongoose.connection.db.dropDatabase()
+}
+
+const clearColletion = async (collection) => {
+  mongoose.connection.db.dropCollection(collection)
 }
 
 const populateDrivers = () => {
@@ -30,7 +39,6 @@ const populateDrivers = () => {
   names
     .map(name => new Driver({name: name}))
     .forEach(driver => {
-      console.log("creating " + driver)
       driver.save()
     })
 }
@@ -55,8 +63,6 @@ const populateZoneCommutes = async () => {
   console.log("populating commutes")
   const zones = await Zone.find() //["hanozono-zone", "hirafu-zone", "kutchan-zone"]
   zones.map((zone, i) => {
-    console.log("adding commutes to ")
-    console.log(zone)
     const otherZones = zones.filter(z => z!==zone)
     const commutes = otherZones
       .map((otherZone, i) => {
@@ -65,10 +71,14 @@ const populateZoneCommutes = async () => {
           duration: i * 15 + 15
         }
     })
-    console.log("adding commutes")
-    console.log(commutes)
     Zone.findOneAndUpdate({name: zone.name}, {commutes: commutes}, (err, res) => err ? console.log(err) : console.log(res))
   })
+}
+
+const populateCustomers = () => {
+  console.log("populating customers")
+  const customers = ['goup1', 'group2', 'group3', 'group4', 'group5']
+  customers.map(c => new Customer({name: c})).forEach(customer => customer.save())
 }
 
 const populateLocations = async () => {
@@ -112,3 +122,10 @@ const populateLocations = async () => {
   })
 }
 
+const populateBookings = async () => {
+  const customers = await Customer.find()
+  const locations = await Location.find()
+  const vehicle = await Vehicle.find()
+  const today = date.format(new Date(), "yyyy/MM/dd") 
+  ???
+}
