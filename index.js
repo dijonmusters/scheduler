@@ -2,14 +2,19 @@ require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const { startOfDay, endOfDay } = require('date-fns');
+const { startOfDay, endOfDay } = require
+('date-fns');
+const { populateDrivers} = require('./seed')
 const app = express();
 const port = 5000;
 
 const uri = process.env.MONGO_URI;
 
 mongoose.connect(uri, { useNewUrlParser: true })
-  .then(() => console.log('successfully connected to mongo'))
+  .then(() => {
+    console.log('successfully connected to mongo')
+    populateDrivers()
+  })
   .catch(e => console.error(e));
 
 const Driver = require('./models/Driver');

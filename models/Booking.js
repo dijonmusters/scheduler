@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Location = mongoose.model('Location').schema;
 const Vehicle = mongoose.model('Vehicle').schema;
+const Customer = mongoose.model('Customer').schema;
+
 
 const schema = {
   customer: Customer,
