@@ -5,25 +5,24 @@ const Zone = require('./models/Zone');
 const Location = require('./models/Location');
 
 
-
-
-const populate = () => {
-  // do this
-}
-
 const uri = "mongodb+srv://nick:spurs4357@schedulercluster-tsmyv.mongodb.net/scheduler_database?retryWrites=true&w=majority"
 
+const print = () => console.log("ASFDSgdgffgf")
 
 mongoose.connect(uri, { useNewUrlParser: true })
   .then(() => {
     console.log('successfully connected to mongo')
-    // populateDrivers()
-    // populateVehicles()
-    // populateInitialZones()
-    // populateZoneCommutes()
-    // populateLocations()
+    populateDrivers()
+    populateVehicles()
+    populateInitialZones()
+    populateZoneCommutes()
+    populateLocations()
   })
   .catch(e => console.error(e));
+
+const clearDb = async () => {
+  mongoose.connection.db.dropDatabase()
+}
 
 const populateDrivers = () => {
   console.log("populating drivers")
@@ -113,5 +112,3 @@ const populateLocations = async () => {
   })
 }
 
-
-module.exports = {populateDrivers}
